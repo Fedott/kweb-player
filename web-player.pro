@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui webenginewidgets
+QT       += core gui webenginewidgets KGlobalAccel
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -15,10 +15,14 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     googlemusicplayer.cpp \
-    playertrack.cpp
+    playertrack.cpp \
+    mprisplayerobject.cpp
 
 HEADERS  += mainwindow.h \
     googlemusicplayer.h \
-    playertrack.h
+    playertrack.h \
+    mprisplayerobject.h
 
 FORMS    += mainwindow.ui
+
+CONFIG += c++11

@@ -1,6 +1,8 @@
 #include "mainwindow.h"
+#include "mprisplayerobject.h"
 #include "ui_mainwindow.h"
 #include <QUrl>
+#include <QDBusConnection>
 
 #include <kglobalaccel.h>
 
@@ -23,8 +25,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionPlayPause, SIGNAL(triggered(bool)), SLOT(playPausePlayer()));
     connect(ui->actionNext, SIGNAL(triggered(bool)), SLOT(nextPlayer()));
     connect(ui->actionPrev, SIGNAL(triggered(bool)), SLOT(prevPlayer()));
+    connect(ui->actionStatus, SIGNAL(triggered(bool)), SLOT(status()));
 
-    setupActions();
+    setupDbus();
 }
 
 MainWindow::~MainWindow()
@@ -34,8 +37,17 @@ MainWindow::~MainWindow()
 
 void MainWindow::setupActions()
 {
-    KGlobalAccel *accel = new KGlobalAccel();
-    KGlobalAccel::getGlobalShortcutsByKey()
+
+}
+
+void MainWindow::setupDbus()
+{
+    QDBusConnection::sessionBus().registerObject(
+                QLatin1String("/Player"),
+                new MprisPlayerObject(player, this),
+                QDBusConnection::ExportAllContents);
+
+    QDBusConnection::sessionBus().registerService(QLatin1String("org.mpris.MediaPlayer2.webPlayer"));
 }
 
 void MainWindow::initWebPlayer()
@@ -71,4 +83,9 @@ void MainWindow::thumbsUpPlayer()
 void MainWindow::thumbsDownPlayer()
 {
     player->trumbsDown();
+}
+
+void MainWindow::status()
+{
+    player->getStatus();
 }

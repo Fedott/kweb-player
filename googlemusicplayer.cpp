@@ -35,6 +35,16 @@ void GoogleMusicPlayer::shuffle()
     jsClickButton("shuffle");
 }
 
+int GoogleMusicPlayer::getStatus()
+{
+    QString code = QString("document.querySelector('sj-icon-button[data-id=play-pause]').disabled === true");
+    QString code2 = QString("document.querySelector('sj-icon-button[data-id=play-pause]').className === 'playing'");
+    getPage()->runJavaScript(code, [](const QVariant &result){ qDebug() << result;});
+    getPage()->runJavaScript(code2, [](const QVariant &result){ qDebug() << result;});
+
+    return 1;
+}
+
 QWebEnginePage *GoogleMusicPlayer::getPage()
 {
     return browser->page();

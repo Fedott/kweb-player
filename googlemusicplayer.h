@@ -16,6 +16,7 @@ public:
     void trumbsUp();
     void trumbsDown();
     void shuffle();
+    int getStatus();
 protected:
     QWebEngineView *browser;
     QWebEnginePage* getPage();
