@@ -13,8 +13,12 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    googlemusicplayer.cpp \
+    playertrack.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    googlemusicplayer.h \
+    playertrack.h
 
 FORMS    += mainwindow.ui

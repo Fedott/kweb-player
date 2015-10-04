@@ -14,10 +14,13 @@ MainWindow::MainWindow(QWidget *parent) :
     browser->load(startPageUrl);
     setCentralWidget(browser);
 
+    player = new GoogleMusicPlayer(browser);
+
     connect(browser, SIGNAL(loadFinished(bool)), SLOT(initWebPlayer()));
 
-    connect(ui->actionPlay_Pause, SIGNAL(triggered(bool)), SLOT(playPausePlayer()));
-
+    connect(ui->actionPlayPause, SIGNAL(triggered(bool)), SLOT(playPausePlayer()));
+    connect(ui->actionNext, SIGNAL(triggered(bool)), SLOT(nextPlayer()));
+    connect(ui->actionPrev, SIGNAL(triggered(bool)), SLOT(prevPlayer()));
 }
 
 MainWindow::~MainWindow()
@@ -32,6 +35,30 @@ void MainWindow::initWebPlayer()
 
 void MainWindow::playPausePlayer()
 {
-    QString code = QString("document.querySelector('sj-icon-button[data-id=play-pause]').click()");
-    browser->page()->runJavaScript(code);
+    player->playPause();
+}
+
+void MainWindow::nextPlayer()
+{
+    player->next();
+}
+
+void MainWindow::prevPlayer()
+{
+    player->prev();
+}
+
+void MainWindow::shufflePlayer()
+{
+    player->shuffle();
+}
+
+void MainWindow::thumbsUpPlayer()
+{
+    player->trumbsUp();
+}
+
+void MainWindow::thumbsDownPlayer()
+{
+    player->trumbsDown();
 }
