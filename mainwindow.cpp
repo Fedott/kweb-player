@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 #include <QUrl>
 
+#include <kglobalaccel.h>
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -21,11 +23,19 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionPlayPause, SIGNAL(triggered(bool)), SLOT(playPausePlayer()));
     connect(ui->actionNext, SIGNAL(triggered(bool)), SLOT(nextPlayer()));
     connect(ui->actionPrev, SIGNAL(triggered(bool)), SLOT(prevPlayer()));
+
+    setupActions();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::setupActions()
+{
+    KGlobalAccel *accel = new KGlobalAccel();
+    KGlobalAccel::getGlobalShortcutsByKey()
 }
 
 void MainWindow::initWebPlayer()

@@ -3,8 +3,6 @@
 
 #include <QString>
 
-
-
 class PlayerTrack
 {
 public:
@@ -22,10 +20,6 @@ protected:
     QString artist;
     QString album;
     QString title;
-
-signals:
-
-public slots:
 };
 
 #endif // PLAYERTRACK_H

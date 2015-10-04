@@ -6,6 +6,8 @@
 #include <QMainWindow>
 #include <QWebEngineView>
 
+#include <kactioncollection.h>
+
 namespace Ui {
 class MainWindow;
 }
@@ -21,6 +23,7 @@ public:
 protected:
     QWebEngineView *browser;
     GoogleMusicPlayer *player;
+    void setupActions();
 protected slots:
     void playPausePlayer();
     void initWebPlayer();
@@ -31,6 +34,7 @@ protected slots:
     void thumbsDownPlayer();
 private:
     Ui::MainWindow *ui;
+    KActionCollection* m_actionCollection;
 };
 
 #endif // MAINWINDOW_H
