@@ -1,9 +1,12 @@
 #include "googlemusicplayer.h"
 
 GoogleMusicPlayer::GoogleMusicPlayer(QWebEngineView *browser)
+    : QObject(browser)
 {
     this->browser = browser;
-    this->status = PlayerStatus();
+    this->status = new PlayerStatus(this->browser);
+
+    this->browser->load(QUrl("https://play.google.com/music/listen"));
 }
 
 void GoogleMusicPlayer::playPause()
@@ -40,12 +43,12 @@ void GoogleMusicPlayer::updatePlayingStatus()
 {
     QString disabledCode = QString("document.querySelector('sj-icon-button[data-id=play-pause]').disabled === true");
     getPage()->runJavaScript(disabledCode, [this](const QVariant &result){
-        this->status.disabled = result.toBool();
+        this->status->setDisabled(result.toBool());
     });
 
     QString playingCode = QString("document.querySelector('sj-icon-button[data-id=play-pause]').className === 'playing'");
     getPage()->runJavaScript(playingCode, [this](const QVariant &result){
-        this->status.playing = result.toBool();
+        this->status->setPlaying(result.toBool());
     });
 }
 
@@ -54,9 +57,9 @@ void GoogleMusicPlayer::updateArt()
     QString currentTrackArtCode = QString("document.getElementById('playingAlbumArt').src.replace(\"=s90-\", \"=s500-\")");
     getPage()->runJavaScript(currentTrackArtCode, [this](const QVariant &result){
         if (result.isValid()) {
-            this->status.art = result.toString();
+            this->status->setArt(result.toString());
         } else {
-            this->status.art = "";
+            this->status->setArt("");
         }
     });
 }
@@ -67,9 +70,9 @@ void GoogleMusicPlayer::updateSongTitle()
                                        "elm.innerText || elm.textContent;");
     getPage()->runJavaScript(currentTrackTitleCode, [this](const QVariant &result){
         if (result.isValid()) {
-            this->status.title = result.toString();
+            this->status->setTitle(result.toString());
         } else {
-            this->status.title = "";
+            this->status->setTitle("");
         }
     });
 }
@@ -80,9 +83,9 @@ void GoogleMusicPlayer::updateSongArtist()
                                        "elm.innerText || elm.textContent;");
     getPage()->runJavaScript(currentTrackTitleCode, [this](const QVariant &result){
         if (result.isValid()) {
-            this->status.artist = result.toString();
+            this->status->setArtist(result.toString());
         } else {
-            this->status.artist = "";
+            this->status->setArtist("");
         }
     });
 }
@@ -93,9 +96,62 @@ void GoogleMusicPlayer::updateSongAlbum()
                                        "elm.innerText || elm.textContent;");
     getPage()->runJavaScript(currentTrackTitleCode, [this](const QVariant &result){
         if (result.isValid()) {
-            this->status.album = result.toString();
+            this->status->setAlbum(result.toString());
         } else {
-            this->status.album = "";
+            this->status->setAlbum("");
+        }
+    });
+}
+
+void GoogleMusicPlayer::updateSongProgress()
+{
+    QString songProgressNowCode = QString("document.querySelector('#material-player-progress').getAttribute('aria-valuenow');");
+    QString songProgressMinCode = QString("document.querySelector('#material-player-progress').getAttribute('aria-valuemin');");
+    QString songProgressMaxCode = QString("document.querySelector('#material-player-progress').getAttribute('aria-valuemax');");
+
+    getPage()->runJavaScript(songProgressMinCode, [this](const QVariant &result){
+        if (result.isValid()) {
+            this->status->setProgressMin(result.toLongLong());
+        } else {
+            this->status->setProgressMin(0);
+        }
+    });
+
+    getPage()->runJavaScript(songProgressMaxCode, [this](const QVariant &result){
+        if (result.isValid()) {
+            this->status->setProgressMax(result.toLongLong());
+        } else {
+            this->status->setProgressMax(0);
+        }
+    });
+
+    getPage()->runJavaScript(songProgressNowCode, [this](const QVariant &result){
+        if (result.isValid()) {
+            this->status->setProgressNow(result.toLongLong());
+        } else {
+            this->status->setProgressNow(0);
+        }
+    });
+}
+
+void GoogleMusicPlayer::updateCanControls()
+{
+    QString canNextCode = getJsQuerySelectorAction(getJsButtonSelector("forward"), "disabled === false");
+    QString canPrevCode = getJsQuerySelectorAction(getJsButtonSelector("rewind"), "disabled === false");
+
+    getPage()->runJavaScript(canNextCode, [this](const QVariant &result){
+        if (result.isValid()) {
+            this->getStatus()->setCanNext(result.toBool());
+        } else {
+            this->getStatus()->setCanNext(false);
+        }
+    });
+
+    getPage()->runJavaScript(canPrevCode, [this](const QVariant &result){
+        if (result.isValid()) {
+            this->getStatus()->setCanPrev(result.toBool());
+        } else {
+            this->getStatus()->setCanPrev(false);
         }
     });
 }
@@ -111,11 +167,15 @@ void GoogleMusicPlayer::updateStatus()
     updateSongArtist();
 
     updateSongAlbum();
+
+    updateSongProgress();
+
+    updateCanControls();
 }
 
 PlayerStatus* GoogleMusicPlayer::getStatus()
 {
-    return &status;
+    return status;
 }
 
 QWebEnginePage *GoogleMusicPlayer::getPage()
@@ -123,26 +183,170 @@ QWebEnginePage *GoogleMusicPlayer::getPage()
     return browser->page();
 }
 
+QString GoogleMusicPlayer::getJsQuerySelectorAction(QString selector, QString actionCode)
+{
+    QString code = QString("document.querySelector('%1').%2;").arg(selector, actionCode);
+    return code;
+}
+
 void GoogleMusicPlayer::jsQuerySelectorClick(QString selector)
 {
-    QString code = QString("document.querySelector('%1').click();").arg(selector);
+    QString code = getJsQuerySelectorAction(selector, "click()");
     getPage()->runJavaScript(code);
+}
+
+QString GoogleMusicPlayer::getJsButtonSelector(QString button)
+{
+    return QString("sj-icon-button[data-id=%1]").arg(button);
 }
 
 void GoogleMusicPlayer::jsClickButton(QString button)
 {
-    QString selector = QString("sj-icon-button[data-id=%1]").arg(button);
+    QString selector = getJsButtonSelector(button);
     jsQuerySelectorClick(selector);
 }
 
 
-int PlayerStatus::getState()
+PlayerStatus::PlayerStatus(QObject *parent)
+    : QObject(parent)
+{
+    connect(this, SIGNAL(playbackStatusChanged()), SLOT(changeCanPlayPause()));
+}
+
+PlayerStatus::~PlayerStatus()
+{
+}
+
+QString PlayerStatus::getState()
 {
     if (disabled) {
-        return 0;
+        return QLatin1String("Stopped");
     } else if (playing) {
-        return 1;
+        return QLatin1String("Playing");
     } else {
-        return 2;
+        return QLatin1String("Paused");
+    }
+}
+
+void PlayerStatus::setProgressMax(const qlonglong &value)
+{
+    if (progressMax != value) {
+        progressMax = value;
+        emit metadataChanged();
+    }
+}
+
+void PlayerStatus::setCanControl(bool value)
+{
+    canControl = value;
+}
+
+void PlayerStatus::changeCanPlayPause()
+{
+    setCanPause(playing);
+    setCanPlay(!disabled && !playing);
+}
+
+void PlayerStatus::setCanOpen(bool value)
+{
+    if (canOpen != value) {
+        canOpen = value;
+        emit canOpenChanged();
+    }
+}
+
+void PlayerStatus::setCanPrev(bool value)
+{
+    if (canPrev != value) {
+        canPrev = value;
+        emit canPrevChanged();
+    }
+}
+
+void PlayerStatus::setCanNext(bool value)
+{
+    if (canNext != value) {
+        canNext = value;
+        emit canNextChanged();
+    }
+}
+
+void PlayerStatus::setCanPause(bool value)
+{
+    if (canPause != value) {
+        canPause = value;
+        emit canPauseChanged();
+    }
+}
+
+void PlayerStatus::setCanPlay(bool value)
+{
+    if (canPlay != value) {
+        canPlay = value;
+        emit canPlayChanged();
+    }
+}
+
+void PlayerStatus::setProgressMin(const qlonglong &value)
+{
+    if (progressMin != value) {
+        progressMin = value;
+        emit metadataChanged();
+    }
+}
+
+void PlayerStatus::setProgressNow(const qlonglong &value)
+{
+    if (progressNow != value) {
+        progressNow = value;
+//        emit metadataChanged();
+    }
+}
+
+void PlayerStatus::setArt(const QString &value)
+{
+    if (art != value) {
+        art = value;
+        emit metadataChanged();
+    }
+}
+
+void PlayerStatus::setAlbum(const QString &value)
+{
+    if (album != value) {
+        album = value;
+        emit metadataChanged();
+    }
+}
+
+void PlayerStatus::setArtist(const QString &value)
+{
+    if (artist != value) {
+        artist = value;
+        emit metadataChanged();
+    }
+}
+
+void PlayerStatus::setTitle(const QString &value)
+{
+    if (title != value) {
+        title = value;
+        emit metadataChanged();
+    }
+}
+
+void PlayerStatus::setPlaying(bool value)
+{
+    if (playing != value) {
+        playing = value;
+        emit playbackStatusChanged();
+    }
+}
+
+void PlayerStatus::setDisabled(bool value)
+{
+    if (disabled != value) {
+        disabled = value;
+        emit playbackStatusChanged();
     }
 }

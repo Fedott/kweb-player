@@ -4,9 +4,32 @@
 #include <QWebEngineView>
 
 
-class PlayerStatus {
+class PlayerStatus : public QObject
+{
+    Q_OBJECT
+
 public:
-    int getState();
+    PlayerStatus(QObject *parent);
+    ~PlayerStatus();
+    QString getState();
+    void setDisabled(bool value);
+    void setPlaying(bool value);
+    void setTitle(const QString &value);
+    void setArtist(const QString &value);
+    void setAlbum(const QString &value);
+    void setArt(const QString &value);
+    void setProgressNow(const qlonglong &value);
+    void setProgressMin(const qlonglong &value);
+    void setProgressMax(const qlonglong &value);
+
+    void setCanPlay(bool value);
+    void setCanPause(bool value);
+    void setCanNext(bool value);
+    void setCanPrev(bool value);
+    void setCanOpen(bool value);
+    void setCanControl(bool value);
+
+
     int state;
     bool disabled;
     bool playing;
@@ -14,10 +37,34 @@ public:
     QString artist;
     QString album;
     QString art;
+    qlonglong progressNow;
+    qlonglong progressMin;
+    qlonglong progressMax;
+    bool canPlay;
+    bool canPause;
+    bool canNext;
+    bool canPrev;
+    bool canOpen;
+    bool canControl;
+
+protected slots:
+    void changeCanPlayPause();
+
+signals:
+    void metadataChanged();
+    void playbackStatusChanged();
+    void canOpenChanged();
+    void canPlayChanged();
+    void canPauseChanged();
+    void canNextChanged();
+    void canPrevChanged();
+    void canControlChanged();
 };
 
-class GoogleMusicPlayer
+class GoogleMusicPlayer : public QObject
 {
+    Q_OBJECT
+
 public:
     GoogleMusicPlayer(QWebEngineView *browser);
 
@@ -35,12 +82,16 @@ protected:
     void jsQuerySelectorClick(QString selector);
     void jsClickButton(QString button);
 
-    PlayerStatus status;
+    PlayerStatus *status;
     void updatePlayingStatus();
     void updateArt();
     void updateSongTitle();
     void updateSongArtist();
     void updateSongAlbum();
+    void updateSongProgress();
+    void updateCanControls();
+    QString getJsQuerySelectorAction(QString selector, QString actionCode);
+    QString getJsButtonSelector(QString button);
 signals:
 
 public slots:

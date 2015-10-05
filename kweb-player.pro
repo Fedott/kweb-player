@@ -15,11 +15,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     googlemusicplayer.cpp \
-    mprisplayerobject.cpp
+    mprisplayerobject.cpp \
+    amarok/DBusAbstractAdaptor.cpp
 
 HEADERS  += mainwindow.h \
     googlemusicplayer.h \
-    mprisplayerobject.h
+    mprisplayerobject.h \
+    amarok/DBusAbstractAdaptor.h
 
 FORMS    += mainwindow.ui
 
