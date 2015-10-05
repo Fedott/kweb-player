@@ -89,5 +89,5 @@ void MainWindow::status()
 {
     player->updateStatus();
     PlayerStatus *status = player->getStatus();
-    qDebug() << status->disabled << status->playing;
+    qDebug() << status->disabled << status->playing << status->getState() << status->artist << status->album << status->title << status->art;
 }

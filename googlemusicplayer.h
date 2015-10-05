@@ -29,17 +29,22 @@ public:
     void shuffle();
     PlayerStatus* getStatus();
 
-    void updateStatus();
 protected:
     QWebEngineView *browser;
     QWebEnginePage* getPage();
     void jsQuerySelectorClick(QString selector);
     void jsClickButton(QString button);
-    PlayerStatus status;
 
+    PlayerStatus status;
+    void updatePlayingStatus();
+    void updateArt();
+    void updateSongTitle();
+    void updateSongArtist();
+    void updateSongAlbum();
 signals:
 
 public slots:
+    void updateStatus();
 };
 
 

@@ -36,19 +36,87 @@ void GoogleMusicPlayer::shuffle()
     jsClickButton("shuffle");
 }
 
-void GoogleMusicPlayer::updateStatus()
+void GoogleMusicPlayer::updatePlayingStatus()
 {
     QString disabledCode = QString("document.querySelector('sj-icon-button[data-id=play-pause]').disabled === true");
-    QString playingCode = QString("document.querySelector('sj-icon-button[data-id=play-pause]').className === 'playing'");
-
     getPage()->runJavaScript(disabledCode, [this](const QVariant &result){
         qDebug() << result;
         this->status.disabled = result.toBool();
     });
+
+    QString playingCode = QString("document.querySelector('sj-icon-button[data-id=play-pause]').className === 'playing'");
     getPage()->runJavaScript(playingCode, [this](const QVariant &result){
         qDebug() << result;
         this->status.playing = result.toBool();
     });
+}
+
+void GoogleMusicPlayer::updateArt()
+{
+    QString currentTrackArtCode = QString("document.getElementById('playingAlbumArt').src.replace(\"=s90-\", \"=s500-\")");
+    getPage()->runJavaScript(currentTrackArtCode, [this](const QVariant &result){
+        qDebug() << result;
+        if (result.isValid()) {
+            this->status.art = result.toString();
+        } else {
+            this->status.art = "";
+        }
+    });
+}
+
+void GoogleMusicPlayer::updateSongTitle()
+{
+    QString currentTrackTitleCode = QString("var elm = document.getElementById('player-song-title').firstChild;"
+                                       "elm.innerText || elm.textContent;");
+    getPage()->runJavaScript(currentTrackTitleCode, [this](const QVariant &result){
+        qDebug() << result;
+        if (result.isValid()) {
+            this->status.title = result.toString();
+        } else {
+            this->status.title = "";
+        }
+    });
+}
+
+void GoogleMusicPlayer::updateSongArtist()
+{
+    QString currentTrackTitleCode = QString("var elm = document.getElementById('player-artist').firstChild;"
+                                       "elm.innerText || elm.textContent;");
+    getPage()->runJavaScript(currentTrackTitleCode, [this](const QVariant &result){
+        qDebug() << result;
+        if (result.isValid()) {
+            this->status.artist = result.toString();
+        } else {
+            this->status.artist = "";
+        }
+    });
+}
+
+void GoogleMusicPlayer::updateSongAlbum()
+{
+    QString currentTrackTitleCode = QString("var elm = document.querySelector(\"#playerSongInfo .player-album\");"
+                                       "elm.innerText || elm.textContent;");
+    getPage()->runJavaScript(currentTrackTitleCode, [this](const QVariant &result){
+        qDebug() << result;
+        if (result.isValid()) {
+            this->status.album = result.toString();
+        } else {
+            this->status.album = "";
+        }
+    });
+}
+
+void GoogleMusicPlayer::updateStatus()
+{
+    updatePlayingStatus();
+
+    updateArt();
+
+    updateSongTitle();
+
+    updateSongArtist();
+
+    updateSongAlbum();
 }
 
 PlayerStatus* GoogleMusicPlayer::getStatus()
