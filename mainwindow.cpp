@@ -3,6 +3,8 @@
 #include "ui_mainwindow.h"
 #include <QUrl>
 #include <QDBusConnection>
+#include <QTimer>
+#include <QTime>
 
 #include <kglobalaccel.h>
 
@@ -28,6 +30,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionStatus, SIGNAL(triggered(bool)), SLOT(status()));
 
     setupDbus();
+
+    initWebPlayer();
 }
 
 MainWindow::~MainWindow()
@@ -52,7 +56,14 @@ void MainWindow::setupDbus()
 
 void MainWindow::initWebPlayer()
 {
+    QTimer *timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), SLOT(playerStatusUpdate()));
+    timer->start(500);
+}
 
+void MainWindow::playerStatusUpdate()
+{
+    player->updateStatus();
 }
 
 void MainWindow::playPausePlayer()
@@ -87,7 +98,6 @@ void MainWindow::thumbsDownPlayer()
 
 void MainWindow::status()
 {
-    player->updateStatus();
     PlayerStatus *status = player->getStatus();
     qDebug() << status->disabled << status->playing << status->getState() << status->artist << status->album << status->title << status->art;
 }

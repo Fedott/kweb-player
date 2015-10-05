@@ -15,12 +15,10 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     googlemusicplayer.cpp \
-    playertrack.cpp \
     mprisplayerobject.cpp
 
 HEADERS  += mainwindow.h \
     googlemusicplayer.h \
-    playertrack.h \
     mprisplayerobject.h
 
 FORMS    += mainwindow.ui
