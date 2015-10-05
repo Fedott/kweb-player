@@ -7,12 +7,10 @@
 
 #include <amarok/DBusAbstractAdaptor.h>
 
-struct MprisStatus;
-
 class MprisPlayerObject : public DBusAbstractAdaptor
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "org.freedesktop.MediaPlayer2.Player")
+    Q_CLASSINFO("D-Bus Interface", "org.mpris.MediaPlayer2.Player")
 
     Q_PROPERTY( QString PlaybackStatus READ PlaybackStatus )
     Q_PROPERTY( QVariantMap Metadata READ Metadata )
@@ -34,6 +32,7 @@ public slots:
     void Pause();
     void Play();
     void PlayPause();
+    void Seek(qlonglong Offset);
     QString PlaybackStatus();
     QVariantMap Metadata();
     qlonglong Position();
@@ -43,6 +42,7 @@ public slots:
     bool CanGoPrevious();
     bool CanOpen();
     bool CanControl();
+    bool CanSeek();
 protected:
     GoogleMusicPlayer *player;
 
@@ -53,6 +53,23 @@ protected slots:
     void canPauseChanged();
     void canGoNextChanged();
     void canGoPreviousChanged();
+};
+
+class MprisObject : public DBusAbstractAdaptor
+{
+    Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface", "org.mpris.MediaPlayer2")
+
+public:
+    MprisObject(QObject *parent);
+
+public slots:
+    void Raise();
+    void Quit();
+    bool CanRaise();
+    bool CanQuit();
+    QString Identity();
+    QString DesktopEntry();
 };
 
 #endif // MPRISPLAYEROBJECT_H

@@ -47,6 +47,8 @@ void MainWindow::setupDbus()
     if (success) {
         DBusAbstractAdaptor *adaptor = new MprisPlayerObject(player, this);
         adaptor->setDBusPath("/org/mpris/MediaPlayer2");
+        adaptor = new MprisObject(this);
+        adaptor->setDBusPath("/org/mpris/MediaPlayer2");
         QDBusConnection::sessionBus().registerObject("/org/mpris/MediaPlayer2", this, QDBusConnection::ExportAdaptors);
     }
 }

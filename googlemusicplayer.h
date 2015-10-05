@@ -40,12 +40,12 @@ public:
     qlonglong progressNow;
     qlonglong progressMin;
     qlonglong progressMax;
-    bool canPlay;
-    bool canPause;
-    bool canNext;
-    bool canPrev;
-    bool canOpen;
-    bool canControl;
+    bool canPlay = false;
+    bool canPause = false;
+    bool canNext = false;
+    bool canPrev = false;
+    bool canOpen = true;
+    bool canControl = true;
 
 protected slots:
     void changeCanPlayPause();

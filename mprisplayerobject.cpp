@@ -38,6 +38,11 @@ void MprisPlayerObject::PlayPause()
     player->playPause();
 }
 
+void MprisPlayerObject::Seek(qlonglong Offset)
+{
+    qDebug() << "Seek";
+}
+
 QString MprisPlayerObject::PlaybackStatus()
 {
     return player->getStatus()->getState();
@@ -91,6 +96,11 @@ bool MprisPlayerObject::CanControl()
     return true; // FIXME
 }
 
+bool MprisPlayerObject::CanSeek()
+{
+    return true;
+}
+
 void MprisPlayerObject::metadataChanged()
 {
     signalPropertyChange("Metadata", Metadata());
@@ -119,4 +129,40 @@ void MprisPlayerObject::canGoNextChanged()
 void MprisPlayerObject::canGoPreviousChanged()
 {
     signalPropertyChange("CanGoPrevious", CanGoPrevious());
+}
+
+MprisObject::MprisObject(QObject *parent)
+    : DBusAbstractAdaptor(parent)
+{
+
+}
+
+void MprisObject::Raise()
+{
+    qDebug() << "Raise";
+}
+
+void MprisObject::Quit()
+{
+    qDebug() << "Quit";
+}
+
+bool MprisObject::CanRaise()
+{
+    return true;
+}
+
+bool MprisObject::CanQuit()
+{
+    return true;
+}
+
+QString MprisObject::Identity()
+{
+    return QString("KWeb-player");
+}
+
+QString MprisObject::DesktopEntry()
+{
+    return QLatin1String("kweb-player");
 }
