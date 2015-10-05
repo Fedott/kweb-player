@@ -5,7 +5,6 @@ MprisPlayerObject::MprisPlayerObject(GoogleMusicPlayer *player, QObject *parent)
     this->player = player;
 }
 
-
 void MprisPlayerObject::Next()
 {
     player->next();
