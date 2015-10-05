@@ -47,7 +47,7 @@ void MainWindow::setupDbus()
                 new MprisPlayerObject(player, this),
                 QDBusConnection::ExportAllContents);
 
-    QDBusConnection::sessionBus().registerService(QLatin1String("org.mpris.MediaPlayer2.webPlayer"));
+    QDBusConnection::sessionBus().registerService(QLatin1String("org.mpris.MediaPlayer2.KWebPlayer"));
 }
 
 void MainWindow::initWebPlayer()
@@ -87,5 +87,7 @@ void MainWindow::thumbsDownPlayer()
 
 void MainWindow::status()
 {
-    player->getStatus();
+    player->updateStatus();
+    PlayerStatus *status = player->getStatus();
+    qDebug() << status->disabled << status->playing;
 }

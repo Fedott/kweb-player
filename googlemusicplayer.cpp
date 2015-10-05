@@ -3,6 +3,7 @@
 GoogleMusicPlayer::GoogleMusicPlayer(QWebEngineView *browser)
 {
     this->browser = browser;
+    this->status = PlayerStatus();
 }
 
 void GoogleMusicPlayer::playPause()
@@ -35,14 +36,24 @@ void GoogleMusicPlayer::shuffle()
     jsClickButton("shuffle");
 }
 
-int GoogleMusicPlayer::getStatus()
+void GoogleMusicPlayer::updateStatus()
 {
-    QString code = QString("document.querySelector('sj-icon-button[data-id=play-pause]').disabled === true");
-    QString code2 = QString("document.querySelector('sj-icon-button[data-id=play-pause]').className === 'playing'");
-    getPage()->runJavaScript(code, [](const QVariant &result){ qDebug() << result;});
-    getPage()->runJavaScript(code2, [](const QVariant &result){ qDebug() << result;});
+    QString disabledCode = QString("document.querySelector('sj-icon-button[data-id=play-pause]').disabled === true");
+    QString playingCode = QString("document.querySelector('sj-icon-button[data-id=play-pause]').className === 'playing'");
 
-    return 1;
+    getPage()->runJavaScript(disabledCode, [this](const QVariant &result){
+        qDebug() << result;
+        this->status.disabled = result.toBool();
+    });
+    getPage()->runJavaScript(playingCode, [this](const QVariant &result){
+        qDebug() << result;
+        this->status.playing = result.toBool();
+    });
+}
+
+PlayerStatus* GoogleMusicPlayer::getStatus()
+{
+    return &status;
 }
 
 QWebEnginePage *GoogleMusicPlayer::getPage()
@@ -62,3 +73,14 @@ void GoogleMusicPlayer::jsClickButton(QString button)
     jsQuerySelectorClick(selector);
 }
 
+
+int PlayerStatus::getState()
+{
+    if (disabled) {
+        return 0;
+    } else if (playing) {
+        return 1;
+    } else {
+        return 2;
+    }
+}

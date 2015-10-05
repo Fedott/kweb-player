@@ -4,6 +4,17 @@
 #include <QWebEngineView>
 
 
+class PlayerStatus {
+public:
+    int getState();
+    int state;
+    bool disabled;
+    bool playing;
+    QString title;
+    QString artist;
+    QString album;
+    QString art;
+};
 
 class GoogleMusicPlayer
 {
@@ -16,16 +27,20 @@ public:
     void trumbsUp();
     void trumbsDown();
     void shuffle();
-    int getStatus();
+    PlayerStatus* getStatus();
+
+    void updateStatus();
 protected:
     QWebEngineView *browser;
     QWebEnginePage* getPage();
     void jsQuerySelectorClick(QString selector);
     void jsClickButton(QString button);
+    PlayerStatus status;
 
 signals:
 
 public slots:
 };
+
 
 #endif // GOOGLEMUSICPLAYER_H

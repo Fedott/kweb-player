@@ -26,6 +26,11 @@ void MprisPlayerObject::Play()
     player->playPause();
 }
 
+void MprisPlayerObject::PlayPause()
+{
+    player->playPause();
+}
+
 MprisStatus MprisPlayerObject::getStatus()
 {
     MprisStatus status;

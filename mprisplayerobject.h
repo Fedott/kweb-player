@@ -21,6 +21,7 @@ public slots:
     void Prev();
     void Pause();
     void Play();
+    void PlayPause();
     MprisStatus getStatus();
 protected:
     GoogleMusicPlayer *player;
