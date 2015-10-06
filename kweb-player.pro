@@ -16,12 +16,14 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     googlemusicplayer.cpp \
     mprisplayerobject.cpp \
-    amarok/DBusAbstractAdaptor.cpp
+    amarok/DBusAbstractAdaptor.cpp \
+    playerstatus.cpp
 
 HEADERS  += mainwindow.h \
     googlemusicplayer.h \
     mprisplayerobject.h \
-    amarok/DBusAbstractAdaptor.h
+    amarok/DBusAbstractAdaptor.h \
+    playerstatus.h
 
 FORMS    += mainwindow.ui
 
