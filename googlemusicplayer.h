@@ -53,6 +53,7 @@ protected slots:
 signals:
     void metadataChanged();
     void playbackStatusChanged();
+    void positionChanged();
     void canOpenChanged();
     void canPlayChanged();
     void canPauseChanged();

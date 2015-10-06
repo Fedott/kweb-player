@@ -7,6 +7,7 @@ MprisPlayerObject::MprisPlayerObject(GoogleMusicPlayer *player, QObject *parent)
 
     connect(player->getStatus(), SIGNAL(metadataChanged()), SLOT(metadataChanged()));
     connect(player->getStatus(), SIGNAL(playbackStatusChanged()), SLOT(playbackStatusChanged()));
+    connect(player->getStatus(), SIGNAL(positionChanged()), SLOT(positionChanged()));
     connect(player->getStatus(), SIGNAL(canPlayChanged()), SLOT(CanPlay()));
     connect(player->getStatus(), SIGNAL(canPauseChanged()), SLOT(CanPause()));
     connect(player->getStatus(), SIGNAL(canNextChanged()), SLOT(canGoNextChanged()));
@@ -66,6 +67,11 @@ qlonglong MprisPlayerObject::Position()
     return player->getStatus()->progressNow;
 }
 
+double MprisPlayerObject::Rate()
+{
+    return 1.0;
+}
+
 bool MprisPlayerObject::CanPlay()
 {
     return player->getStatus()->canPlay;
@@ -101,9 +107,12 @@ bool MprisPlayerObject::CanSeek()
     return true;
 }
 
+
+
 void MprisPlayerObject::metadataChanged()
 {
     signalPropertyChange("Metadata", Metadata());
+    signalPropertyChange("Position", Position());
 }
 
 void MprisPlayerObject::playbackStatusChanged()
@@ -129,6 +138,11 @@ void MprisPlayerObject::canGoNextChanged()
 void MprisPlayerObject::canGoPreviousChanged()
 {
     signalPropertyChange("CanGoPrevious", CanGoPrevious());
+}
+
+void MprisPlayerObject::positionChanged()
+{
+    signalPropertyChange("Position", Position());
 }
 
 MprisObject::MprisObject(QObject *parent)

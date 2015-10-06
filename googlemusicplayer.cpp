@@ -228,14 +228,6 @@ QString PlayerStatus::getState()
     }
 }
 
-void PlayerStatus::setProgressMax(const qlonglong &value)
-{
-    if (progressMax != value) {
-        progressMax = value;
-        emit metadataChanged();
-    }
-}
-
 void PlayerStatus::setCanControl(bool value)
 {
     canControl = value;
@@ -299,7 +291,15 @@ void PlayerStatus::setProgressNow(const qlonglong &value)
 {
     if (progressNow != value) {
         progressNow = value;
-//        emit metadataChanged();
+//        emit positionChanged();
+    }
+}
+
+void PlayerStatus::setProgressMax(const qlonglong &value)
+{
+    if (progressMax != value) {
+        progressMax = value;
+        emit metadataChanged();
     }
 }
 
