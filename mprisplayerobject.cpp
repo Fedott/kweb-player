@@ -12,6 +12,7 @@ MprisPlayerObject::MprisPlayerObject(GoogleMusicPlayer *player, QObject *parent)
     connect(player->getStatus(), SIGNAL(canPauseChanged()), SLOT(CanPause()));
     connect(player->getStatus(), SIGNAL(canNextChanged()), SLOT(canGoNextChanged()));
     connect(player->getStatus(), SIGNAL(canPrevChanged()), SLOT(canGoPreviousChanged()));
+    connect(player->getStatus(), SIGNAL(volumeChanged()), SLOT(volumeChanged()));
 }
 
 void MprisPlayerObject::Next()
@@ -72,6 +73,16 @@ double MprisPlayerObject::Rate()
     return 1.0;
 }
 
+double MprisPlayerObject::Volume()
+{
+    return player->getStatus()->volume;
+}
+
+void MprisPlayerObject::setVolume(double volume)
+{
+    player->setVolume(volume);
+}
+
 bool MprisPlayerObject::CanPlay()
 {
     return player->getStatus()->canPlay;
@@ -104,10 +115,8 @@ bool MprisPlayerObject::CanControl()
 
 bool MprisPlayerObject::CanSeek()
 {
-    return true;
+    return false; // FIXME
 }
-
-
 
 void MprisPlayerObject::metadataChanged()
 {
@@ -145,6 +154,11 @@ void MprisPlayerObject::positionChanged()
     signalPropertyChange("Position", Position());
 }
 
+void MprisPlayerObject::volumeChanged()
+{
+    signalPropertyChange("Volume", Volume());
+}
+
 MprisObject::MprisObject(QObject *parent)
     : DBusAbstractAdaptor(parent)
 {
@@ -163,12 +177,12 @@ void MprisObject::Quit()
 
 bool MprisObject::CanRaise()
 {
-    return true;
+    return false; // FEXME
 }
 
 bool MprisObject::CanQuit()
 {
-    return true;
+    return false; // FIXME
 }
 
 QString MprisObject::Identity()

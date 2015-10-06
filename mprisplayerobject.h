@@ -21,6 +21,7 @@ class MprisPlayerObject : public DBusAbstractAdaptor
     Q_PROPERTY( bool CanPause READ CanPause )
     Q_PROPERTY( bool CanControl READ CanControl )
     Q_PROPERTY( double Rate READ Rate )
+    Q_PROPERTY( double Volume READ Volume WRITE setVolume )
 
 public:
     MprisPlayerObject(GoogleMusicPlayer *player, QObject *parent);
@@ -38,6 +39,8 @@ public slots:
     QVariantMap Metadata();
     qlonglong Position();
     double Rate();
+    double Volume();
+    void setVolume(double volume);
     bool CanPlay();
     bool CanPause();
     bool CanGoNext();
@@ -56,6 +59,7 @@ protected slots:
     void canGoNextChanged();
     void canGoPreviousChanged();
     void positionChanged();
+    void volumeChanged();
 };
 
 class MprisObject : public DBusAbstractAdaptor

@@ -29,6 +29,7 @@ public:
     void setCanOpen(bool value);
     void setCanControl(bool value);
 
+    void setVolume(int value);
 
     int state;
     bool disabled;
@@ -46,6 +47,8 @@ public:
     bool canPrev = false;
     bool canOpen = true;
     bool canControl = true;
+    double volume = 1.0;
+
 
 protected slots:
     void changeCanPlayPause();
@@ -60,6 +63,7 @@ signals:
     void canNextChanged();
     void canPrevChanged();
     void canControlChanged();
+    void volumeChanged();
 };
 
 class GoogleMusicPlayer : public QObject
@@ -76,7 +80,7 @@ public:
     void trumbsDown();
     void shuffle();
     PlayerStatus* getStatus();
-
+    void setVolume(double volume);
 protected:
     QWebEngineView *browser;
     QWebEnginePage* getPage();
@@ -93,6 +97,7 @@ protected:
     void updateCanControls();
     QString getJsQuerySelectorAction(QString selector, QString actionCode);
     QString getJsButtonSelector(QString button);
+    void updateVolume();
 signals:
 
 public slots:

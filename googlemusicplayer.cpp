@@ -39,6 +39,15 @@ void GoogleMusicPlayer::shuffle()
     jsClickButton("shuffle");
 }
 
+void GoogleMusicPlayer::setVolume(double volume)
+{
+    int normalizeVolume = (int) (volume * 100);
+    QString action = QString("value = %1").arg(normalizeVolume);
+    QString code = getJsQuerySelectorAction("#material-vslider", action);
+
+    getPage()->runJavaScript(code);
+}
+
 void GoogleMusicPlayer::updatePlayingStatus()
 {
     QString disabledCode = QString("document.querySelector('sj-icon-button[data-id=play-pause]').disabled === true");
@@ -156,21 +165,26 @@ void GoogleMusicPlayer::updateCanControls()
     });
 }
 
+void GoogleMusicPlayer::updateVolume()
+{
+    QString code = getJsQuerySelectorAction("#material-vslider", ".value");
+    getPage()->runJavaScript(code, [this](const QVariant &result){
+        if (result.isValid()) {
+            this->getStatus()->setVolume(result.toInt());
+        }
+    });
+}
+
 void GoogleMusicPlayer::updateStatus()
 {
     updatePlayingStatus();
-
     updateArt();
-
     updateSongTitle();
-
     updateSongArtist();
-
     updateSongAlbum();
-
     updateSongProgress();
-
     updateCanControls();
+    updateVolume();
 }
 
 PlayerStatus* GoogleMusicPlayer::getStatus()
@@ -231,6 +245,15 @@ QString PlayerStatus::getState()
 void PlayerStatus::setCanControl(bool value)
 {
     canControl = value;
+}
+
+void PlayerStatus::setVolume(int value)
+{
+    double normalizeValue = (double) value / 100;
+    if (volume != normalizeValue) {
+        volume = (double) normalizeValue;
+        emit volumeChanged();
+    }
 }
 
 void PlayerStatus::changeCanPlayPause()
