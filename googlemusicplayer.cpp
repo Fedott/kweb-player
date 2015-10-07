@@ -1,12 +1,29 @@
 #include "googlemusicplayer.h"
 
+#include <QFile>
+#include <QJsonDocument>
+#include <QJsonObject>
+
 GoogleMusicPlayer::GoogleMusicPlayer(QWebEngineView *browser)
     : QObject(browser)
 {
     this->browser = browser;
     this->status = new PlayerStatus(this->browser);
 
+    QFile file;
+    file.setFileName(":/google-play-music.js");
+    file.open(QIODevice::ReadOnly);
+    playerControlCode = file.readAll();
+    file.close();
+
+    connect(browser, SIGNAL(loadFinished(bool)), SLOT(finishLoading(bool)));
+
     this->browser->load(QUrl("https://play.google.com/music/listen"));
+}
+
+void GoogleMusicPlayer::finishLoading(bool)
+{
+    getPage()->runJavaScript(playerControlCode);
 }
 
 void GoogleMusicPlayer::playPause()
@@ -177,14 +194,36 @@ void GoogleMusicPlayer::updateVolume()
 
 void GoogleMusicPlayer::updateStatus()
 {
-    updatePlayingStatus();
-    updateArt();
-    updateSongTitle();
-    updateSongArtist();
-    updateSongAlbum();
-    updateSongProgress();
-    updateCanControls();
-    updateVolume();
+//    updatePlayingStatus();
+//    updateArt();
+//    updateSongTitle();
+//    updateSongArtist();
+//    updateSongAlbum();
+//    updateSongProgress();
+//    updateCanControls();
+//    updateVolume();
+
+    QString code = QString("GPMgetPlayerStatus();");
+    getPage()->runJavaScript(code, [this](const QVariant &result){
+        if (result.isValid()) {
+            QJsonDocument jsonDocument = QJsonDocument::fromJson(result.toString().toUtf8());
+            QJsonObject json = jsonDocument.object();
+
+            this->getStatus()->setMetadata(
+                    json["title"].toString(),
+                    json["artist"].toString(),
+                    json["album"].toString(),
+                    json["art"].toString(),
+                    json["progressMax"].toString().toLongLong(),
+                    json["progressMin"].toString().toLongLong()
+                )
+                ->setCanNext(json["canNext"].toBool())
+                ->setCanPrev(json["canPrev"].toBool())
+                ->setVolume(json["volume"].toInt())
+                ->setProgressNow(json["progressNow"].toString().toLongLong())
+            ;
+        }
+    });
 }
 
 PlayerStatus* GoogleMusicPlayer::getStatus()

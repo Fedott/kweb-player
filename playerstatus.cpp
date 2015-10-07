@@ -21,18 +21,21 @@ QString PlayerStatus::getState()
     }
 }
 
-void PlayerStatus::setCanControl(bool value)
+PlayerStatus *PlayerStatus::setCanControl(bool value)
 {
     canControl = value;
+    return this;
 }
 
-void PlayerStatus::setVolume(int value)
+PlayerStatus *PlayerStatus::setVolume(int value)
 {
     double normalizeValue = (double) value / 100;
     if (volume != normalizeValue) {
         volume = (double) normalizeValue;
         emit volumeChanged();
     }
+
+    return this;
 }
 
 void PlayerStatus::changeCanPlayPause()
@@ -41,44 +44,54 @@ void PlayerStatus::changeCanPlayPause()
     setCanPlay(!disabled && !playing);
 }
 
-void PlayerStatus::setCanOpen(bool value)
+PlayerStatus *PlayerStatus::setCanOpen(bool value)
 {
     if (canOpen != value) {
         canOpen = value;
         emit canOpenChanged();
     }
+
+    return this;
 }
 
-void PlayerStatus::setCanPrev(bool value)
+PlayerStatus *PlayerStatus::setCanPrev(bool value)
 {
     if (canPrev != value) {
         canPrev = value;
         emit canPrevChanged();
     }
+
+    return this;
 }
 
-void PlayerStatus::setCanNext(bool value)
+PlayerStatus *PlayerStatus::setCanNext(bool value)
 {
     if (canNext != value) {
         canNext = value;
         emit canNextChanged();
     }
+
+    return this;
 }
 
-void PlayerStatus::setCanPause(bool value)
+PlayerStatus *PlayerStatus::setCanPause(bool value)
 {
     if (canPause != value) {
         canPause = value;
         emit canPauseChanged();
     }
+
+    return this;
 }
 
-void PlayerStatus::setCanPlay(bool value)
+PlayerStatus *PlayerStatus::setCanPlay(bool value)
 {
     if (canPlay != value) {
         canPlay = value;
         emit canPlayChanged();
     }
+
+    return this;
 }
 
 void PlayerStatus::setProgressMin(const qlonglong &value)
@@ -89,12 +102,14 @@ void PlayerStatus::setProgressMin(const qlonglong &value)
     }
 }
 
-void PlayerStatus::setProgressNow(const qlonglong &value)
+PlayerStatus *PlayerStatus::setProgressNow(const qlonglong &value)
 {
     if (progressNow != value) {
         progressNow = value;
 //        emit positionChanged();
     }
+
+    return this;
 }
 
 void PlayerStatus::setProgressMax(const qlonglong &value)
@@ -135,6 +150,28 @@ void PlayerStatus::setTitle(const QString &value)
         title = value;
         emit metadataChanged();
     }
+}
+
+PlayerStatus *PlayerStatus::setMetadata(
+        QString songTitle,
+        QString songArtist,
+        QString songAlbum,
+        QString songArt,
+        qlonglong songProgressMax,
+        qlonglong songProgressMin
+) {
+    if (title != songTitle) {
+        title = songTitle;
+        artist = songArtist;
+        album = songAlbum;
+        art = songArt;
+        progressMax = songProgressMax;
+        progressMin = songProgressMin;
+
+        emit playbackStatusChanged();
+    }
+
+    return this;
 }
 
 void PlayerStatus::setPlaying(bool value)

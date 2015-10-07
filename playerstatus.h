@@ -17,18 +17,18 @@ public:
     void setArtist(const QString &value);
     void setAlbum(const QString &value);
     void setArt(const QString &value);
-    void setProgressNow(const qlonglong &value);
+    PlayerStatus *setProgressNow(const qlonglong &value);
     void setProgressMin(const qlonglong &value);
     void setProgressMax(const qlonglong &value);
 
-    void setCanPlay(bool value);
-    void setCanPause(bool value);
-    void setCanNext(bool value);
-    void setCanPrev(bool value);
-    void setCanOpen(bool value);
-    void setCanControl(bool value);
+    PlayerStatus *setCanPlay(bool value);
+    PlayerStatus *setCanPause(bool value);
+    PlayerStatus *setCanNext(bool value);
+    PlayerStatus *setCanPrev(bool value);
+    PlayerStatus *setCanOpen(bool value);
+    PlayerStatus *setCanControl(bool value);
 
-    void setVolume(int value);
+    PlayerStatus *setVolume(int value);
 
     int state;
     bool disabled;
@@ -48,7 +48,13 @@ public:
     bool canControl = true;
     double volume = 1.0;
 
-
+    PlayerStatus *setMetadata(
+            QString songTitle,
+            QString songArtist,
+            QString songAlbum,
+            QString songArt,
+            qlonglong songProgressMax,
+            qlonglong songProgressMin);
 protected slots:
     void changeCanPlayPause();
 

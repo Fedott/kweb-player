@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>google-play-music.js</file>
+    </qresource>
+</RCC>

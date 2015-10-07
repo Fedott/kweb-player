@@ -23,6 +23,8 @@ public:
 protected:
     QWebEngineView *browser;
     QWebEnginePage* getPage();
+    QString playerControlCode;
+
     void jsQuerySelectorClick(QString selector);
     void jsClickButton(QString button);
 
@@ -41,6 +43,7 @@ signals:
 
 public slots:
     void updateStatus();
+    void finishLoading(bool);
 };
 
 
