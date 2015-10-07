@@ -1,4 +1,5 @@
 #include "playerstatus.h"
+#include <QDebug>
 
 PlayerStatus::PlayerStatus(QObject *parent)
     : QObject(parent)
@@ -38,10 +39,12 @@ PlayerStatus *PlayerStatus::setVolume(int value)
     return this;
 }
 
-void PlayerStatus::changeCanPlayPause()
+PlayerStatus *PlayerStatus::changeCanPlayPause()
 {
     setCanPause(playing);
     setCanPlay(!disabled && !playing);
+
+    return this;
 }
 
 PlayerStatus *PlayerStatus::setCanOpen(bool value)
@@ -168,24 +171,28 @@ PlayerStatus *PlayerStatus::setMetadata(
         progressMax = songProgressMax;
         progressMin = songProgressMin;
 
+        emit metadataChanged();
+    }
+
+    return this;
+}
+
+PlayerStatus *PlayerStatus::setPlaying(bool value)
+{
+    if (playing != value) {
+        playing = value;
         emit playbackStatusChanged();
     }
 
     return this;
 }
 
-void PlayerStatus::setPlaying(bool value)
-{
-    if (playing != value) {
-        playing = value;
-        emit playbackStatusChanged();
-    }
-}
-
-void PlayerStatus::setDisabled(bool value)
+PlayerStatus *PlayerStatus::setDisabled(bool value)
 {
     if (disabled != value) {
         disabled = value;
         emit playbackStatusChanged();
     }
+
+    return this;
 }

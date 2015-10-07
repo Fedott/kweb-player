@@ -20,22 +20,31 @@ function GPMgetPlayerStatus() {
     var volumeBar = document.querySelector('#material-vslider');
     var progressBar = document.querySelector('#material-player-progress');
     var artElement = document.getElementById('playingAlbumArt');
-    var titleElement = document.getElementById('player-song-title').firstChild;
-    var artistElement = document.getElementById('player-artist').firstChild;
     var albumElement = document.querySelector("#playerSongInfo .player-album");
 
-    status.disabled = playPauseButton.disabled === false;
+    try {
+        var titleElement = document.getElementById('player-song-title').firstChild;
+    } catch (e) { var titleElement = null; }
+    try {
+        var artistElement = document.getElementById('player-artist').firstChild;
+    } catch (e) { var artistElement = null; }
+
+    status.disabled = playPauseButton.disabled === true;
     status.playing = playPauseButton.className === 'playing';
-    status.artLocation = artElement.src.replace("=s90-", "=s500-");
-    status.songTitle = titleElement.innerText || titleElement.textContent;
-    status.songArtist = artistElement.innerText || artistElement.textContent;
-    status.songTitle = albumElement.innerText || albumElement.textContent;
-    status.progressNow = progressBar.getAttribute('aria-valuenow');
-    status.progressMin = progressBar.getAttribute('aria-valuemin');
-    status.progressMax = progressBar.getAttribute('aria-valuemax');
     status.canNext = nextButton.disabled === false;
     status.catPrev = prevButton.disabled === false;
     status.volume = volumeBar.value;
+
+    try {
+        status.artLocation = artElement.src.replace("=s90-", "=s500-");
+        status.songTitle = titleElement.innerText || titleElement.textContent;
+        status.songArtist = artistElement.innerText || artistElement.textContent;
+        status.songTitle = albumElement.innerText || albumElement.textContent;
+    } catch (e) {}
+
+    status.progressNow = progressBar.getAttribute('aria-valuenow');
+    status.progressMin = progressBar.getAttribute('aria-valuemin');
+    status.progressMax = progressBar.getAttribute('aria-valuemax');
 
     return JSON.stringify(status);
 }

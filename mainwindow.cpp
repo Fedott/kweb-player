@@ -55,9 +55,9 @@ void MainWindow::setupDbus()
 
 void MainWindow::initWebPlayer()
 {
-    QTimer *timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), SLOT(playerStatusUpdate()));
-    timer->start(500);
+//    QTimer *timer = new QTimer(this);
+//    connect(timer, SIGNAL(timeout()), SLOT(playerStatusUpdate()));
+//    timer->start(500);
 }
 
 void MainWindow::playerStatusUpdate()

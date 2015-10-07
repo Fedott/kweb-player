@@ -11,8 +11,8 @@ public:
     PlayerStatus(QObject *parent);
     ~PlayerStatus();
     QString getState();
-    void setDisabled(bool value);
-    void setPlaying(bool value);
+    PlayerStatus *setDisabled(bool value);
+    PlayerStatus *setPlaying(bool value);
     void setTitle(const QString &value);
     void setArtist(const QString &value);
     void setAlbum(const QString &value);
@@ -56,7 +56,7 @@ public:
             qlonglong songProgressMax,
             qlonglong songProgressMin);
 protected slots:
-    void changeCanPlayPause();
+    PlayerStatus *changeCanPlayPause();
 
 signals:
     void metadataChanged();

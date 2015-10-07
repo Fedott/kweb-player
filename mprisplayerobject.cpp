@@ -17,36 +17,42 @@ MprisPlayerObject::MprisPlayerObject(GoogleMusicPlayer *player, QObject *parent)
 
 void MprisPlayerObject::Next()
 {
+    qDebug() << "Next";
     player->next();
 }
 
 void MprisPlayerObject::Previous()
 {
+    qDebug() << "Previous";
     player->prev();
 }
 
 void MprisPlayerObject::Pause()
 {
+    qDebug() << "Pause";
     player->playPause();
 }
 
 void MprisPlayerObject::Play()
 {
+    qDebug() << "Play";
     player->playPause();
 }
 
 void MprisPlayerObject::PlayPause()
 {
+    qDebug() << "PlayPause";
     player->playPause();
 }
 
 void MprisPlayerObject::Seek(qlonglong Offset)
 {
-    qDebug() << "Seek";
+    qDebug() << "Seek" << Offset;
 }
 
 QString MprisPlayerObject::PlaybackStatus()
 {
+    qDebug() << "PlaybackStatus";
     return player->getStatus()->getState();
 }
 
@@ -120,6 +126,7 @@ bool MprisPlayerObject::CanSeek()
 
 void MprisPlayerObject::metadataChanged()
 {
+    qDebug() << "metadataChanged";
     signalPropertyChange("Metadata", Metadata());
     signalPropertyChange("Position", Position());
 }

@@ -3,6 +3,7 @@
 #include <QFile>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QTimer>
 
 GoogleMusicPlayer::GoogleMusicPlayer(QWebEngineView *browser)
     : QObject(browser)
@@ -24,6 +25,12 @@ GoogleMusicPlayer::GoogleMusicPlayer(QWebEngineView *browser)
 void GoogleMusicPlayer::finishLoading(bool)
 {
     getPage()->runJavaScript(playerControlCode);
+
+    qDebug() << "PageLoaded";
+
+    QTimer *timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), SLOT(updateStatus()));
+    timer->start(500);
 }
 
 void GoogleMusicPlayer::playPause()
@@ -203,6 +210,7 @@ void GoogleMusicPlayer::updateStatus()
 //    updateCanControls();
 //    updateVolume();
 
+//    qDebug() << "Update status";
     QString code = QString("GPMgetPlayerStatus();");
     getPage()->runJavaScript(code, [this](const QVariant &result){
         if (result.isValid()) {
@@ -210,15 +218,17 @@ void GoogleMusicPlayer::updateStatus()
             QJsonObject json = jsonDocument.object();
 
             this->getStatus()->setMetadata(
-                    json["title"].toString(),
-                    json["artist"].toString(),
-                    json["album"].toString(),
-                    json["art"].toString(),
+                    json["songTitle"].toString(),
+                    json["songArtist"].toString(),
+                    json["songAlbum"].toString(),
+                    json["artLocation"].toString(),
                     json["progressMax"].toString().toLongLong(),
                     json["progressMin"].toString().toLongLong()
                 )
                 ->setCanNext(json["canNext"].toBool())
                 ->setCanPrev(json["canPrev"].toBool())
+                ->setDisabled(json["disabled"].toBool())
+                ->setPlaying(json["playing"].toBool())
                 ->setVolume(json["volume"].toInt())
                 ->setProgressNow(json["progressNow"].toString().toLongLong())
             ;
