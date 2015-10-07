@@ -19,6 +19,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     player = new GoogleMusicPlayer(browser);
 
+    trayIcon = new TrayIcon(this);
+    setWindowIcon(QIcon(":/icon.png"));
 
     setupActions();
     setupDbus();

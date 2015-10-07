@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include "googlemusicplayer.h"
+#include "trayicon.h"
 
 #include <QMainWindow>
 #include <QWebEngineView>
@@ -23,6 +24,7 @@ public slots:
 protected:
     QWebEngineView *browser;
     GoogleMusicPlayer *player;
+    TrayIcon *trayIcon;
     void setupActions();
     void setupDbus();
 protected slots:
