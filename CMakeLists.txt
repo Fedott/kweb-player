@@ -20,9 +20,9 @@ amarok/DBusAbstractAdaptor.cpp
 
 add_executable(kweb-player ${SRC_SOURCES})
 
-#find_package(Qt5Widgets REQUIRED)
-find_package(Qt5 REQUIRED Core Gui WebEngine)
+find_package(Qt5Widgets REQUIRED)
+find_package(Qt5 REQUIRED Core Gui WebEngineWidgets)
 
-target_link_libraries(kweb-player Qt5::Widgets)
+target_link_libraries(kweb-player Qt5::Widgets Qt5:WebEngineWidgets)
 
 
