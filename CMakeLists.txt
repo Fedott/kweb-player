@@ -8,6 +8,21 @@ set(CMAKE_AUTOMOC ON)
 # to always look for includes there:
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+
+find_package(Qt5Widgets REQUIRED)
+find_package(Qt5 REQUIRED Core Gui WebEngineWidgets)
+
+include_directories(
+    /usr/include/qt/QtWebEngineWidgets
+    /usr/include/qt/QtWebEngine
+    /usr/include/qt/QtDBus
+)
+
+QT5_WRAP_UI(UIS_HDRS
+    mainwindow.ui
+)
+
 set(SRC_SOURCES
 main.cpp
 googlemusicplayer.cpp
@@ -18,10 +33,7 @@ trayicon.cpp
 amarok/DBusAbstractAdaptor.cpp
 )
 
-add_executable(kweb-player ${SRC_SOURCES})
-
-find_package(Qt5Widgets REQUIRED)
-find_package(Qt5 REQUIRED Core Gui WebEngineWidgets)
+add_executable(kweb-player ${SRC_SOURCES} ${UIS_HDRS})
 
 target_link_libraries(kweb-player Qt5::Widgets Qt5:WebEngineWidgets)
 
