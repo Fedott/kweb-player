@@ -39,6 +39,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::setupActions()
 {
+    connect(ui->actionExit, SIGNAL(triggered(bool)), SLOT(quit()));
+
     connect(ui->actionPlayPause, SIGNAL(triggered(bool)), SLOT(playPausePlayer()));
     connect(ui->actionNext, SIGNAL(triggered(bool)), SLOT(nextPlayer()));
     connect(ui->actionPrev, SIGNAL(triggered(bool)), SLOT(prevPlayer()));
@@ -117,4 +119,8 @@ void MainWindow::showNotify()
         notification->setText(QString("%1 - %2").arg(player->getStatus()->album).arg(player->getStatus()->artist));
         notification->sendEvent();
     }
+}
+
+void MainWindow::quit() {
+    trayIcon->action("quit")->trigger();
 }

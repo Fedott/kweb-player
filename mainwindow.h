@@ -37,6 +37,7 @@ protected slots:
     void thumbsUpPlayer();
     void thumbsDownPlayer();
     void status();
+    void quit();
 private:
     Ui::MainWindow *ui;
 };
