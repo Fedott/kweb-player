@@ -39,7 +39,7 @@ function GPMgetPlayerStatus() {
         status.artLocation = artElement.src.replace("=s90-", "=s500-");
         status.songTitle = titleElement.innerText || titleElement.textContent;
         status.songArtist = artistElement.innerText || artistElement.textContent;
-        status.songTitle = albumElement.innerText || albumElement.textContent;
+        status.songAlbum = albumElement.innerText || albumElement.textContent;
     } catch (e) {}
 
     status.progressNow = progressBar.getAttribute('aria-valuenow');
