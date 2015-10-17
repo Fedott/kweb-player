@@ -73,4 +73,5 @@ target_link_libraries(kweb-player
     KF5::Notifications
 )
 
-
+# Install instructions
+install(FILES kweb-player.notifyrc DESTINATION ${KNOTIFYRC_INSTALL_DIR})

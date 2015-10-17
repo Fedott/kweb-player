@@ -21,6 +21,7 @@ public:
 
 public slots:
     void playerStatusUpdate();
+    void showNotify();
 protected:
     QWebEngineView *browser;
     GoogleMusicPlayer *player;

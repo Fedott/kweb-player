@@ -1,0 +1,7 @@
+[Global]
+IconName=kweb-player
+Name=KWeb Player
+
+[Event/trackChanged]
+Name=Track changed
+Action=Popup

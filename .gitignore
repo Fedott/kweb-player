@@ -1,3 +1,5 @@
 *.pro.user
 Makefile
 build
+.idea/
+ui_mainwindow.h

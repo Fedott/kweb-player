@@ -22,7 +22,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>29</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuPlayer">
@@ -34,7 +34,21 @@
     <addaction name="actionPrev"/>
     <addaction name="actionStatus"/>
    </widget>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuDebug">
+    <property name="title">
+     <string>&amp;Debug</string>
+    </property>
+    <addaction name="actionShow_notify"/>
+   </widget>
+   <addaction name="menuFile"/>
    <addaction name="menuPlayer"/>
+   <addaction name="menuDebug"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionPlayPause">
@@ -64,6 +78,19 @@
   <action name="actionStatus">
    <property name="text">
     <string>&amp;Status</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>&amp;Exit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionShow_notify">
+   <property name="text">
+    <string>Show notify</string>
    </property>
   </action>
  </widget>

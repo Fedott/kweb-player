@@ -7,6 +7,7 @@
 #include <QTime>
 
 #include <kglobalaccel.h>
+#include <knotification.h>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -18,6 +19,9 @@ MainWindow::MainWindow(QWidget *parent) :
     setCentralWidget(browser);
 
     player = new GoogleMusicPlayer(browser);
+
+    connect(player->getStatus(), SIGNAL(metadataChanged()), SLOT(showNotify()));
+    connect(player->getStatus(), SIGNAL(playbackStatusChanged()), SLOT(showNotify()));
 
     trayIcon = new TrayIcon(this);
     setWindowIcon(QIcon(":/icon.png"));
@@ -39,6 +43,8 @@ void MainWindow::setupActions()
     connect(ui->actionNext, SIGNAL(triggered(bool)), SLOT(nextPlayer()));
     connect(ui->actionPrev, SIGNAL(triggered(bool)), SLOT(prevPlayer()));
     connect(ui->actionStatus, SIGNAL(triggered(bool)), SLOT(status()));
+
+    connect(ui->actionShow_notify, SIGNAL(triggered(bool)), SLOT(showNotify()));
 }
 
 void MainWindow::setupDbus()
@@ -101,4 +107,14 @@ void MainWindow::status()
 {
     PlayerStatus *status = player->getStatus();
     qDebug() << status->disabled << status->playing << status->getState() << status->artist << status->album << status->title << status->art;
+}
+
+void MainWindow::showNotify()
+{
+    if (player->getStatus()->getState() == "Playing") {
+        KNotification *notification = new KNotification("trackChanged");
+        notification->setTitle(player->getStatus()->title);
+        notification->setText(QString("%1 - %2").arg(player->getStatus()->album).arg(player->getStatus()->artist));
+        notification->sendEvent();
+    }
 }
