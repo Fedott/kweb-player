@@ -24,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(player->getStatus(), SIGNAL(playbackStatusChanged()), SLOT(showNotify()));
 
     trayIcon = new TrayIcon(this);
-    setWindowIcon(QIcon(":/icon.png"));
+    setWindowIcon(QIcon(":/icon/icon64.png"));
 
     setupActions();
     setupDbus();

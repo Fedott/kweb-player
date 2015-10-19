@@ -5,6 +5,6 @@
 TrayIcon::TrayIcon(QObject *parent)
     : KStatusNotifierItem(parent)
 {
-    setIconByPixmap(QIcon(":/icon.png"));
+    setIconByPixmap(QIcon(":/icon/icon64.png"));
     setStatus(KStatusNotifierItem::Active);
 }

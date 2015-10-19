@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Google Music Web player</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="jsscripts.qrc">
+    <normaloff>:/icon/icon64.png</normaloff>:/icon/icon64.png</iconset>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout_2"/>
   </widget>
@@ -90,11 +94,13 @@
   </action>
   <action name="actionShow_notify">
    <property name="text">
-    <string>Show notify</string>
+    <string>&amp;Show notify</string>
    </property>
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="jsscripts.qrc"/>
+ </resources>
  <connections/>
 </ui>

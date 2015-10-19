@@ -32,3 +32,6 @@ CONFIG += c++11
 
 RESOURCES += \
     jsscripts.qrc
+
+DISTFILES += \
+    kweb-player.notifyrc

@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>google-play-music.js</file>
         <file>icon.png</file>
+        <file>icon/icon64.png</file>
     </qresource>
 </RCC>
