@@ -24,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(player->getStatus(), SIGNAL(playbackStatusChanged()), SLOT(showNotify()));
 
     trayIcon = new TrayIcon(this);
-    setWindowIcon(QIcon(":/icon/icon64.png"));
+    setWindowIcon(QIcon(":/icon/kweb-player-icon-flat-headphones.png"));
 
     setupActions();
     setupDbus();

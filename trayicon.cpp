@@ -5,6 +5,6 @@
 TrayIcon::TrayIcon(QObject *parent)
     : KStatusNotifierItem(parent)
 {
-    setIconByPixmap(QIcon(":/icon/icon64.png"));
+    setIconByPixmap(QIcon(":/icon/kweb-player-icon-flat-headphones.png"));
     setStatus(KStatusNotifierItem::Active);
 }

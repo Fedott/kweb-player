@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="jsscripts.qrc">
-    <normaloff>:/icon/icon64.png</normaloff>:/icon/icon64.png</iconset>
+    <normaloff>:/icon/kweb-player-icon-flat-headphones.png</normaloff>:/icon/kweb-player-icon-flat-headphones.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout_2"/>
