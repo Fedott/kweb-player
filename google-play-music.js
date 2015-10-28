@@ -14,9 +14,9 @@ function GPMgetPlayerStatus() {
         volume: 100,
     };
 
-    var playPauseButton = document.querySelector('sj-icon-button[data-id=play-pause]');
-    var nextButton = document.querySelector('sj-icon-button[data-id=forward]');
-    var prevButton = document.querySelector('sj-icon-button[data-id=rewind]');
+    var playPauseButton = document.querySelector('paper-icon-button[data-id=play-pause]');
+    var nextButton = document.querySelector('paper-icon-button[data-id=forward]');
+    var prevButton = document.querySelector('paper-icon-button[data-id=rewind]');
     var volumeBar = document.querySelector('#material-vslider');
     var progressBar = document.querySelector('#material-player-progress');
     var artElement = document.getElementById('playingAlbumArt');
@@ -30,9 +30,9 @@ function GPMgetPlayerStatus() {
     } catch (e) { var artistElement = null; }
 
     status.disabled = playPauseButton.disabled === true;
-    status.playing = playPauseButton.className === 'playing';
+    status.playing = playPauseButton.classList.contains('playing');
     status.canNext = nextButton.disabled === false;
-    status.catPrev = prevButton.disabled === false;
+    status.canPrev = prevButton.disabled === false;
     status.volume = volumeBar.value;
 
     try {
