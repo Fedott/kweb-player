@@ -8,6 +8,7 @@ set(KF5_MIN_VERSION "5.4.0")
 find_package(ECM 1.0.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
+include(ECMInstallIcons)
 include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDECompilerSettings)
@@ -75,3 +76,7 @@ target_link_libraries(kweb-player
 
 # Install instructions
 install(FILES kweb-player.notifyrc DESTINATION ${KNOTIFYRC_INSTALL_DIR})
+install(PROGRAMS kweb-player.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
+install(TARGETS kweb-player ${INSTALL_TARGETS_DEFAULT_ARGS})
+ecm_install_icons(ICONS icon/24-apps-kweb-player.png icon/32-apps-kweb-player.png icon/64-apps-kweb-player.png icon/128-apps-kweb-player.png icon/256-apps-kweb-player.png icon/500-apps-kweb-player.png DESTINATION ${ICON_INSTALL_DIR})
+

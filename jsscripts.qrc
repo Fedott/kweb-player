@@ -1,8 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>google-play-music.js</file>
-        <file>icon.png</file>
-        <file>icon/icon64.png</file>
-        <file>icon/kweb-player-icon-flat-headphones.png</file>
+        <file>icon/kweb-player.png</file>
     </qresource>
 </RCC>

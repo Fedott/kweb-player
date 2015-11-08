@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Exec=kweb-player
+Icon=kweb-player
+Terminal=false
+Name=KWeb Player
+GenericName=Audio Player
+Comment=Kde player for google play music
+Categories=Qt;KDE;Audio;Player;AudioVideo;
