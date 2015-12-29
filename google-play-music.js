@@ -19,11 +19,11 @@ function GPMgetPlayerStatus() {
     var prevButton = document.querySelector('paper-icon-button[data-id=rewind]');
     var volumeBar = document.querySelector('#material-vslider');
     var progressBar = document.querySelector('#material-player-progress');
-    var artElement = document.getElementById('playingAlbumArt');
+    var artElement = document.getElementById('playerBarArt');
     var albumElement = document.querySelector("#playerSongInfo .player-album");
 
     try {
-        var titleElement = document.getElementById('player-song-title').firstChild;
+        var titleElement = document.getElementById('currently-playing-title').firstChild;
     } catch (e) { var titleElement = null; }
     try {
         var artistElement = document.getElementById('player-artist').firstChild;
@@ -36,11 +36,11 @@ function GPMgetPlayerStatus() {
     status.volume = volumeBar.value;
 
     try {
-        status.artLocation = artElement.src.replace("=s90-", "=s500-");
         status.songTitle = titleElement.innerText || titleElement.textContent;
         status.songArtist = artistElement.innerText || artistElement.textContent;
         status.songAlbum = albumElement.innerText || albumElement.textContent;
-    } catch (e) {}
+        status.artLocation = artElement.src.replace("=s90-", "=s500-");
+    } catch (e) { }
 
     status.progressNow = progressBar.getAttribute('aria-valuenow');
     status.progressMin = progressBar.getAttribute('aria-valuemin');
